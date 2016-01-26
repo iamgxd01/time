@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>JQuery实现可编辑的表格</title>
+
+<script type="text/javascript" src="{{ url_for('static',filename = 'js/jquery-1.11.3.min.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename = 'js/jquery1min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static',filename = 'js/jquery1table.js') }}"></script>
+
+<link rel="stylesheet" href="{{ url_for('static',filename = 'css/jquery1tablemin.css') }}">
+
+
+{#    <link href="{{ url_for('static',filename = 'css/EditTable.css') }}" rel="stylesheet" type="text/css" />#}
+{#    <script src="{{ url_for('static',filename = 'js/jquery.js') }}" type="text/javascript"></script>#}
+{#    <script src="{{ url_for('static',filename = 'js/EditTable.js') }}" type="text/javascript"></script>#}
+    <script type="text/javascript"> $(document).ready(function(){
+
+               var options = {
+
+                   data:[[],[]],
+                tableClass: 'inputtable',
+                jsonData: false,
+                headerCols: [['序号'],['开始时间'],['任务'],['清单'],['思路'],['预计时长'],['效率'],['总结'],['结束时间'],['时长'],],
+                maxRows: 999,
+                first_row: true,
+                row_template: false,
+                field_templates: false,}
+
+{#        $(".addcol").bind('click',function(){#}
+{#            alert("addcol")#}
+{#        })#}
+{#        $("#myform").find('.addrow').bind('click',function(){#}
+{#            alert("addcol")#}
+{#        })#}
+{#        $("table").find(".addcol").bind('click',function(){#}
+{#            alert("addcol")#}
+{#        })#}
+
+
+
+
+        $("#myform").editTable(options)
+
+
+    });
+    </script>
+</head>
+<body>
+<div id="my-editable">
+   <table  id="myform">
+       <tr>
+           <td><input type="button" id = 'buttonAddRow' value="添加行"/></td>
+       </tr>
+
+    </table>
+
+</div>
+
+</body>
+</html>

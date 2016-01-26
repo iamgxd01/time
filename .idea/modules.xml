@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://F:/求职/论文/房山文档/YSSH/.idea/YSSH.iml" filepath="F:/求职/论文/房山文档/YSSH/.idea/YSSH.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../flask3d/.idea/flask3d.iml" filepath="$PROJECT_DIR$/../flask3d/.idea/flask3d.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Python/抢票工具/huochepiao/.idea/huochepiao.iml" filepath="$PROJECT_DIR$/../../Python/抢票工具/huochepiao/.idea/huochepiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../运行中/time_operating/.idea/model01.iml" filepath="$PROJECT_DIR$/../../运行中/time_operating/.idea/model01.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../../Python/thehardway/.idea/thehardway.iml" filepath="$PROJECT_DIR$/../../Python/thehardway/.idea/thehardway.iml" />
+    </modules>
+  </component>
+</project>

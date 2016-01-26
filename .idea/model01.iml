@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$/../../运行中/time_operating" />
+    <orderEntry type="jdk" jdkName="Python 3.5.0 (D:\Python\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module" module-name="flask3d" />
+    <orderEntry type="module" module-name="thehardway" />
+    <orderEntry type="module" module-name="huochepiao" />
+    <orderEntry type="module" module-name="YSSH" />
+    <orderEntry type="module" module-name="项目" />
+    <orderEntry type="module" module-name="1.2练习" />
+    <orderEntry type="module" module-name="ceshi" />
+    <orderEntry type="module" module-name="1.2课程案例源码" />
+    <orderEntry type="module" module-name="58ganji" />
+    <orderEntry type="module" module-name="58tongcheng" />
+  </component>
+  <component name="TemplatesService">
+    <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
+  </component>
+</module>
