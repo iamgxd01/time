@@ -5,8 +5,9 @@ from flask.ext.script import Manager
 from flask.ext.bootstrap import Bootstrap
 from flask.ext.sqlalchemy import SQLAlchemy
 from sqlalchemy.ext.declarative import DeclarativeMeta
-from sqlalchemy import create_engine
+from sqlalchemy import func,desc
 import os
+import mytools
 import sqlite3
 from flask_restful import fields, marshal
 import json
@@ -38,6 +39,7 @@ class List(db.Model):
     __tablename__ = 'lists'
     id = db.Column(db.Integer, primary_key=True)
     listname = db.Column(db.String(64), unique=True)
+    list_order = db.Column(db.Integer)
     tasks = db.relationship('Task', backref='lists')
 
     def __repr__(self):
@@ -68,10 +70,10 @@ class Task(db.Model):
 @app.route('/', methods=['GET', 'POST'])
 def index():
 
-    date = datetime.date.today()
-
-
-    return render_template('manage-users.html', taskjson=taskjson(), list_id=1,date = date)
+    date = str(datetime.date.today())
+    print(date)
+    calender_date_object = str_to_date(date)
+    return render_template('time.html', taskjson=taskjson(calender_date_object), list_id=List.query.filter_by(listname='今天')[0].id ,date = date)
 
 
 @app.route('/gettaskdata')
@@ -96,7 +98,8 @@ def addtask():
         list_id = request.form.get('list_id')
         task_date = request.form.get('task_date')
         task_date_object = str_to_date(task_date)
-
+        if List.query.filter_by(id=list_id)[0].listname == '今天':
+            list_id = List.query.filter_by(listname='收集箱')[0].id
         task = Task.query.filter_by(id=task_id).first()
         if name == 'taskname':
             task_add = Task(taskname=value, list_id=list_id,date = task_date_object)
@@ -225,16 +228,17 @@ def addlist():
 @app.route('/tasks/<listname>',methods=['GET','POST'] )
 def tasks(listname):
 
-
     calender_date = request.args.get('date')
     calender_date_object = str_to_date(calender_date)
+    print(listname)
+    print(calender_date)
     # 查询当前日期下所有task
-    if listname == '全部':
+    if listname == '今天':
         tasks = Task.query.filter_by(date=calender_date_object)
-        list_id = 0
+        list_id = List.query.filter_by(listname=listname)[0].id
     else:
         list = List.query.filter_by(listname=listname)
-        tasks = Task.query.filter_by(list_id=list[0].id, date=calender_date_object)
+        tasks = Task.query.filter_by(list_id =list[0].id, date=calender_date_object)
         list_id = list[0].id
     # tasks = Task.query.filter_by(list_id=listid)
     try:
@@ -243,11 +247,46 @@ def tasks(listname):
         for task in tasks:
             task_host.append(task)
         taskjson = json.dumps(task_host, cls=new_alchemy_encoder(), check_circular=False)
-        print('taskjson'+taskjson)
-        return render_template('manage-users.html', taskjson=taskjson, list_id=list_id, date =calender_date )
+        print('taskjson:::::::'+taskjson)
+        return render_template('time.html', taskjson=taskjson, list_id=list_id, date =calender_date )
 
     except Exception as e:
         print(e)
+
+
+@app.route('/get_notification',methods=['GET','POST'])
+def get_notification():
+
+    value = request.form.get('value')
+    print(value)
+    date_object = str_to_date('2016-01-28')
+    # db.session.query(Task).filter(Task.date==mytools.get_now_date_object(),Task.actual_time==mytools.get_now_time_object())
+    tasks_start_time = db.session.query(Task).filter(Task.date == date_object,Task.start_time == mytools.get_now_time_object())
+    tasks_scheduled_time = db.session.query(Task).filter(Task.date == date_object,Task.start_time < mytools.get_now_time_object())
+
+    # tasks_actual_time =
+    notifications = []
+    for task in tasks_start_time :
+        data1 = {
+              'title': task.taskname,
+              'body': '开始时间到',
+              'type': 'start'
+        }
+        notifications.append(data1)
+    for task in tasks_scheduled_time:
+        if task.start_time is not None and task.scheduled_time is not None :
+            add_time = mytools.time_add_time(task.start_time,mytools.int_to_time_object(int(task.scheduled_time)))
+            if  add_time  == mytools.get_now_time_object():
+                data2 = {
+                  'title': task.taskname,
+                  'body': '计时时间到',
+                  'type': 'scheduled'
+                }
+                notifications.append(data2)
+    print(notifications)
+
+    return jsonify(notifications=notifications)
+
 
 
 
@@ -269,9 +308,12 @@ def indexs():
 def login():
     return render_template('login.html')
 
-@app.route('/manageusers')
-def manageusers():
-    return render_template('manage-users.html')
+@app.route('/statistics/')
+def statistics():
+    calender_date = request.args.get('date')
+    print(calender_date)
+    calender_date_object = str_to_date(calender_date)
+    return render_template('statistics.html', statisticjson= day_statistics(calender_date), date=calender_date_object)
 
 @app.route('/manage')
 def manage():
@@ -375,9 +417,8 @@ def object2dict(obj):
                 # return json.JSONEncoder.default(self, obj)
 
 
-
-def taskjson():
-    tasks = Task.query.all()
+def taskjson(date_object):
+    tasks = Task.query.filter_by(date=date_object)
     try:
 
         task_host = []
@@ -390,7 +431,9 @@ def taskjson():
         print(e)
 
 def listjson():
-    lists = List.query.all()
+
+    lists = db.session.query(List).order_by(List.list_order)
+
     try:
 
         Hosts = []
@@ -402,13 +445,66 @@ def listjson():
         return listjson
     except Exception as e:
         print(e)
-def str_to_date (str):
+
+
+def str_to_date(str):
      str_year = str[0:4]
      str_mouth = str[5:7]
      str_day = str[8:10]
      date_object = datetime.date(int(str_year),int(str_mouth),int(str_day))
      return date_object
 
-if __name__ == '__main__':
 
+# def day_statistics(date_str):
+#     date_object = str_to_date(date_str)
+#     tasks = db.session.query(func.sum(Task.actual_time),List.listname,).\
+#         join(List).filter(Task.date == date_object, Task.actual_time >0).\
+#         group_by(Task.list_id)
+#     try:
+#
+#         task_host = []
+#         for task in tasks:
+#             task_host.append(task)
+#         taskjson = json.dumps(task_host, cls=new_alchemy_encoder(), check_circular=False)
+#         print(taskjson)
+#         return taskjson
+#     except Exception as e:
+#         print(e)
+
+
+def day_statistics(date_str):
+    date_object = str_to_date(date_str)
+    tasks = db.session.query(func.sum(Task.actual_time) ,List.listname,).\
+        join(List).filter(Task.date == date_object, Task.actual_time >0).\
+        group_by(Task.list_id).order_by(desc(func.sum(Task.actual_time)))
+    task_list = []
+    for task in tasks :
+        data ={
+            "listname":task[1],
+            "time_sum":task[0]
+        }
+        task_list.append(data)
+    json.dumps(task_list)
+    print(json.dumps(task_list))
+    return json.dumps(task_list)
+
+
+# 给清单添加排序用的序号
+def define_list_order(listname_str, order):
+    # db.session.add(List(listname=listname_str, list_order=order))
+    # db.session.commit()
+    List.query.filter(List.listname == listname_str).update({List.list_order: order})
+    db.session.commit()
+    print(List.query.filter(List.listname == listname_str)[0].list_order)
+
+if __name__ == '__main__':
+    # define_list_order('今天',1)
+
+    # db.create_all()
+    # app.debug = True
+
+    # app.run(host="0.0.0.0",port=8080, debug=True)
+    # app.run(host='172.16.2.2', debug=True)
     app.run(debug=True)
+
+         # List.query.filter(List.listname != '收集箱' )

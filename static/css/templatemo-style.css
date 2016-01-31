@@ -16,6 +16,7 @@ TABLE OF CONTENT
 /* 1. Universal Styles
 ----------------------------------------------*/
 * {	font-family: 'Open Sans', sans-serif; }
+/** {	font-family: "Microsoft YaHei" ! important; }*/
 body {	font-size: 13px; }
 body, .templatemo-left-nav { background: #1f2124;  }
 h1, h2, h3 { margin: 0; }
@@ -226,6 +227,17 @@ footer { padding: 15px; }
 	display: -ms-flexbox;
 	display: flex;
 }
+.p_left{
+	float:left;
+	font-size: 1.5em;
+}
+
+.p_right{
+	float:left;
+	font-size: 1.5em;
+
+}
+
 .col-1 {
 	-webkit-flex: 1;
 	    -ms-flex: 1;
@@ -276,6 +288,18 @@ footer { padding: 15px; }
 	color: white;
 	padding: 15px;
 }
+.h2-center {
+	border: 1px ;
+	margin: 0 auto;
+	width: 10%;/*必须指定宽度,可为百分比或像素值*/
+}
+
+.canvas-center {
+	border: 1px ;
+	margin: 0 auto;
+	width: 70%;/*必须指定宽度,可为百分比或像素值*/
+}
+
 .panel-default .fa-times {
 	top: 12px;
 	background-color: #67B5B9;
@@ -303,6 +327,9 @@ footer { padding: 15px; }
 	background-color: #39ADB4;
 	border-color: #E9E8E8;
 }
+.panel-table{ margin: 3px}
+.panel-table>tbody>tr>td { padding: 10px 15px; }
+.panel-table>thead>tr>td { padding: 15px; }
 .table { margin-bottom: 0; }
 .table>tbody>tr>td { padding: 10px 15px; }
 .table>thead>tr>td { padding: 15px; }
@@ -647,6 +674,7 @@ input[type="radio"]:checked + label span {
 		padding-top: 9px;
 		padding-left: 11px;
 	}
+
 
 
 
