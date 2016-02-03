@@ -3,7 +3,7 @@
   <component name="NewModuleRootManager">
     <content url="file://$MODULE_DIR$" />
     <content url="file://$MODULE_DIR$/../../运行中/time_operating" />
-    <orderEntry type="jdk" jdkName="Python 3.5.0 (D:\Python\python.exe)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.5.0 virtualenv at F:\git\time_dev\time\time_venv" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="flask3d" />
     <orderEntry type="module" module-name="thehardway" />

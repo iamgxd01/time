@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+{% block head %}
+    {{ super() }}
+    <script type="text/javascript" src="{{ url_for('static',filename = 'js/statistics.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename = 'js/Chart.js') }}"></script>
+    <script type="text/javascript" src="{{ url_for('static',filename = 'js/jquery.wysiwyg.js') }}"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.0.3/angular.min.js"></script>
+    <link href="{{ url_for('static',filename='css/jquery.wysiwyg.css') }}" rel="stylesheet">
+    <script type="text/javascript">
+        $(document).ready(function () {
+            str = {{ statisticjson|safe }}
+                    console.log(str)
+            $('#mystatistics').statistics(str)
+
+        })
+
+    </script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('#wysiwyg').wysiwyg({
+                        {#                controls: {#}
+                        {#                strikeThrough: { visible: true },#}
+                        {#                underline: { visible: true },#}
+                        {#                subscript: { visible: true },#}
+                        {#                superscript: { visible: true }#}
+                        {#             }#}
+                    }
+            );
+        })
+
+    </script>
+{% endblock %}
+
+{% block main_content %}
+    <div class="templatemo-content col-1 light-gray-bg">
+
+        <div class="templatemo-content-container" ,id="mystatistics">
+            <div class="templatemo-content-widget white-bg">
+                <h2 class="margin-bottom-10">今日统计</h2>
+
+                <p class="margin-bottom-0">Credit goes to <a href="http://jqvmap.com" target="_parent">JQVMap</a>.</p>
+            </div>
+            <div class="templatemo-flex-row flex-content-row">
+                <div class="col-1">
+                    <div class="panel panel-default margin-10">
+                        <div class="panel-heading "><h2 class="h2-center">今日统计</h2></div>
+                        <div class="panel-body templatemo-flex-row flex-content-row">
+
+
+                            <div class="col-1">
+                                <div id="list_time_sum" class="vmap">
+                                    <p class="p_left"> 总时长:</p>
+
+                                    <p class="p_right"> 8小时23分钟</p>
+
+                                    <table class="table table-striped table-bordered templatemo-user-table" ,
+                                           id="mystatistics">
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-1">
+                                <div class="panel-body canvas-center">
+                                    <canvas class="canvas-center" id="myChart" width="350" height="350"></canvas>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="templatemo-content-widget white-bg">
+                            <p> 总结：</p>
+                            <textarea id="wysiwyg"></textarea>
+
+                            <h2>First click the 'request permission' button</h2>
+                            <button id="request">Request permission</button>
+                            <h2>After permission is granted, click the 'show notification' button</h2>
+                            <button id="show">Show notification</button>
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+{% endblock %}
